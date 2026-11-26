@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gửi Crush của Nguyễn Ngọc Huy</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --bg-1: #1e1b4b;
+      --bg-2: #4c1d95;
+      --bg-3: #be185d;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --text-main: #1f2937;
+      --text-muted: #4b5563;
+      --accent: #e11d48;
+      --accent-2: #7c3aed;
+      --particle-speed: 7s;
+    }
+
+    body.colorful-mode {
+      --bg-1: #ff9a9e;
+      --bg-2: #fad0c4;
+      --bg-3: #a18cd1;
+    }
+
+    body.calm-mode {
+      --particle-speed: 14s;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      background-size: 240% 240%;
+      animation: gradientShift 14s ease infinite;
+      transition: background 1.4s ease;
+      padding: 24px 16px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Hạt ánh sáng / sắc màu bay nền */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .orb {
+      position: fixed;
+      bottom: -40px;
+      border-radius: 50%;
+      filter: blur(1px);
+      opacity: 0;
+      animation: riseOrb var(--particle-speed) linear forwards;
+      transition: animation-duration 1.5s ease;
+    }
+
+    @keyframes riseOrb {
+      0% {
+        transform: translateY(0) scale(0.7);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.75;
+      }
+      85% {
+        opacity: 0.65;
+      }
+      100% {
+        transform: translateY(-115vh) scale(1.15);
+        opacity: 0;
+      }
+    }
+
+    /* Nút điều khiển nhạc góc trên bên phải */
+    .music-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      color: #1f2937;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .music-toggle:hover {
+      transform: translateY(-1px);
+      background: #ffffff;
+    }
+
+    /* Khung chính */
+    .container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 620px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border-radius: 26px;
+      padding: 36px 28px;
+      box-shadow: 0 22px 50px rgba(15, 23, 42, 0.22);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    /* Màn mở đầu */
+    .intro-card {
+      text-align: center;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(225, 29, 72, 0.1);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+
+    .intro-title {
+      font-size: 24px;
+      line-height: 1.35;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .intro-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 26px;
+      line-height: 1.55;
+    }
+
+    .btn-open {
+      background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-open:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 14px 30px rgba(244, 63, 94, 0.4);
+    }
+
+    /* Màn bức thư */
+    .letter-view {
+      display: none;
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    .letter-view.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed rgba(107, 114, 128, 0.25);
+    }
+
+    .letter-tag {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-2);
+    }
+
+    .skip-btn {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--accent-2);
+      border: none;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .skip-btn:hover {
+      background: rgba(124, 58, 237, 0.18);
+    }
+
+    .letter-body {
+      color: var(--text-main);
+      font-size: 16px;
+      line-height: 1.8;
+      min-height: 180px;
+      white-space: pre-line;
+    }
+
+    .letter-paragraph {
+      margin-bottom: 16px;
+    }
+
+    /* Bước 1: Khoảng lặng dư âm */
+    .afterglow-note {
+      display: none;
+      margin-top: 12px;
+      font-size: 13px;
+      font-style: italic;
+      color: #6b7280;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .afterglow-note.show {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Bước 2: Lời chốt & 2 lựa chọn */
+    .closing-step {
+      display: none;
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(107, 114, 128, 0.2);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .closing-step.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .closing-question {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .choice-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn-choice-primary {
+      flex: 1 1 200px;
+      background: linear-gradient(135deg, #e11d48, #9333ea);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(225, 29, 72, 0.25);
+      transition: transform 0.2s ease;
+    }
+
+    .btn-choice-primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-choice-secondary {
+      flex: 1 1 200px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-main);
+      border: 1.5px solid rgba(107, 114, 128, 0.3);
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-choice-secondary:hover {
+      transform: translateY(-2px);
+      background: #f9fafb;
+    }
+
+    /* Bước 3: Ending card */
+    .ending-card {
+      display: none;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .ending-card.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ending-frame {
+      background: linear-gradient(135deg, rgba(255, 228, 230, 0.75), rgba(237, 233, 254, 0.75));
+      border: 1.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 26px 20px;
+      margin-bottom: 20px;
+    }
+
+    .ending-quote {
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--text-main);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .ending-sign {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .ending-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--text-main);
+      border: 1px solid rgba(107, 114, 128, 0.25);
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      background: #ffffff;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 26px 20px;
+        border-radius: 22px;
+      }
+      .intro-title {
+        font-size: 21px;
+      }
+      .letter-body {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Lớp hạt màu sắc / ánh sáng -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Nút bật/tắt nhạc 808 -->
+  <button class="music-toggle" id="musicToggle" type="button" aria-label="Bật hoặc tắt nhạc">
+    <span id="musicIcon">🔊</span>
+    <span id="musicLabel">Nhạc 808: Bật</span>
+  </button>
+
+  <!-- File nhạc 808: đặt file nhac-808.mp3 cùng thư mục với index.html -->
+  <audio id="bgMusic" src="nhac-808.mp3" loop preload="auto"></audio>
+
+  <main class="container">
+    <!-- MÀN MỞ ĐẦU -->
+    <section class="card intro-card" id="introCard">
+      <div class="badge">A quiet message</div>
+      <h1 class="intro-title">Gửi Crush của Nguyễn Ngọc Huy</h1>
+      <p class="intro-sub">
+        Có một lá thư nhỏ cất giữ rất lâu rồi, phải gửi đi  trước khi mỗi đứa bước sang một chặng mới.
+      </p>
+      <button class="btn-open" id="openLetterBtn" type="button">
+        Love letter for you
+      </button>
+    </section>
+
+    <!-- MÀN BỨC THƯ + BƯỚC 1 + BƯỚC 2 -->
+    <section class="card letter-view" id="letterView">
+      <div class="letter-header">
+        <span class="letter-tag">💌 Lá thư của 4 năm im lặng</span>
+        <button class="skip-btn" id="skipTypingBtn" type="button">Hiện nhanh chữ</button>
+      </div>
+
+      <div class="letter-body" id="letterBody"></div>
+
+      <!-- Bước 1: Dòng dư âm nhẹ nhàng trong lúc chờ 2-3s -->
+      <div class="afterglow-note" id="afterglowNote">
+        ...
+      </div>
+
+      <!-- Bước 2: Lời chốt & 2 lựa chọn -->
+      <div class="closing-step" id="closingStep">
+        <p class="closing-question" id="closingQuestion">
+          Cảm ơn bà vì đã là một phần rực rỡ trong thanh xuân cấp 2 của tui. Trước khi mỗi đứa một ngã rẽ cấp 3, bà có muốn...
+        </p>
+        <div class="choice-group">
+          <!-- TODO: Sửa label & hành động cho nút chính ở Bước 2 -->
+          <button class="btn-choice-primary" id="primaryChoiceBtn" type="button">
+            giữ liên lạc, thỉnh thoảng kể chuyện cấp 3 cho tui nghe
+          </button>
+
+          <!-- TODO: Sửa label & hành động cho nút phụ ở Bước 2 -->
+          <button class="btn-choice-secondary" id="secondaryChoiceBtn" type="button">
+            thôiiiii
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BƯỚC 3: ENDING CARD -->
+    <section class="card ending-card" id="endingCard">
+      <div class="ending-frame">
+        <p class="ending-quote" id="endingQuote">
+          Chúc bà một mùa hè thật vui và một hành trình cấp 3 thật rực rỡ.
+        </p>
+        <div class="ending-sign">love you my crussh</div>
+      </div>
+
+      <div class="ending-actions">
+        <button class="btn-ghost" id="replayBtn" type="button">↺ Đọc lại từ đầu</button>
+        <button class="btn-ghost" id="endingMusicBtn" type="button">🎵 Bật/Tắt nhạc </button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ==========================================
+    // 1. NỘI DUNG BỨC THƯ (Mỗi phần tử là 1 đoạn)
+    // ==========================================
+    const letterParagraphs = [
+      "Bà biết không, thích bà suốt 3, 4 năm qua giống như giữ một vùng trời riêng mà không bao giờ dám mở cửa cho ai xem. Nhiều lúc tự thấy mình hèn thật, cứ đứng im ở phía sau, nhìn bà cười, nhìn những điều bình thường bỗng nhiên trở nên có màu sắc hơn hẳn.",
+      "Có lẽ chuyện tui thích bà chẳng còn là bí mật gì nữa, vì ai cũng biết rồi. Nhưng cuối năm lớp 9 này, sắp bước sang cấp 3 rồi, tui chỉ muốn nói thật lòng một lần rằng: cảm ơn bà vì đã xuất hiện và làm cuộc sống vốn nhạt nhẽo của tui trở nên rực rỡ đến thế dù đôi khi chỉ là những hư ảo đẹp đẽ mà tự tui mơ mộng thôi."
+    ];
+
+    // Cấu hình thời gian (ms)
+    const TYPE_SPEED = 10;        // Tốc độ gõ từng ký tự
+    const PARAGRAPH_PAUSE = 450;  // Nghỉ giữa các đoạn thư
+    const AFTERGLOW_DELAY = 450; // Bước 1: Khoảng lặng dư âm 5 giây thôi bỏ đi 
+
+    // Các phần tử DOM
+    const introCard = document.getElementById("introCard");
+    const letterView = document.getElementById("letterView");
+    const letterBody = document.getElementById("letterBody");
+    const afterglowNote = document.getElementById("afterglowNote");
+    const closingStep = document.getElementById("closingStep");
+    const endingCard = document.getElementById("endingCard");
+
+    const openLetterBtn = document.getElementById("openLetterBtn");
+    const skipTypingBtn = document.getElementById("skipTypingBtn");
+    const primaryChoiceBtn = document.getElementById("primaryChoiceBtn");
+    const secondaryChoiceBtn = document.getElementById("secondaryChoiceBtn");
+    const replayBtn = document.getElementById("replayBtn");
+
+    const bgMusic = document.getElementById("bgMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicIcon = document.getElementById("musicIcon");
+    const musicLabel = document.getElementById("musicLabel");
+    const endingMusicBtn = document.getElementById("endingMusicBtn");
+    const particlesEl = document.getElementById("particles");
+
+    let typingTimer = null;
+    let afterglowTimer = null;
+    let isSkipping = false;
+    let isFinishedTyping = false;
+
+    // ==========================================
+    // 2. NHẠC 808 & HIỆU ỨNG MÀU SẮC
+    // ==========================================
+    function startMusic() {
+      bgMusic.volume = 0.45;
+      bgMusic.play().then(() => {
+        updateMusicUI(true);
+      }).catch(() => {
+        // Nếu thiếu file nhac-808.mp3 hoặc trình duyệt chặn thì vẫn chạy web bình thường
+        updateMusicUI(false);
+      });
+    }
+
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.volume = 0.45;
+        bgMusic.play().then(() => updateMusicUI(true)).catch(() => {});
+      } else {
+        bgMusic.pause();
+        updateMusicUI(false);
+      }
+    }
+
+    function updateMusicUI(playing) {
+      musicToggle.style.display = "flex";
+      if (playing) {
+        musicIcon.textContent = "🔊";
+        musicLabel.textContent = "Nhạc: Bật";
+      } else {
+        musicIcon.textContent = "🔇";
+        musicLabel.textContent = "Nhạc: Tắt";
+      }
+    }
+
+    function spawnOrb() {
+      const orb = document.createElement("div");
+      orb.className = "orb";
+      const colors = ["#ff758f", "#ffb3c6", "#c77dff", "#ffd166", "#72efdd", "#ff9e00"];
+      const size = Math.floor(Math.random() * 18) + 10;
+
+      orb.style.width = size + "px";
+      orb.style.height = size + "px";
+      orb.style.left = Math.random() * 100 + "vw";
+      orb.style.background = colors[Math.floor(Math.random() * colors.length)];
+      orb.style.boxShadow = `0 0 14px ${orb.style.background}`;
+
+      particlesEl.appendChild(orb);
+      setTimeout(() => orb.remove(), 16000);
+    }
+
+    setInterval(spawnOrb, 450);
+
+    // ==========================================
+    // 3. HIỆU ỨNG GÕ CHỮ & CÁC BƯỚC SAU ĐÓ
+    // ==========================================
+    function clearAllTimers() {
+      clearTimeout(typingTimer);
+      clearTimeout(afterglowTimer);
+    }
+
+    function startLetterFlow() {
+      clearAllTimers();
+      isSkipping = false;
+      isFinishedTyping = false;
+
+      letterBody.innerHTML = "";
+      afterglowNote.classList.remove("show");
+      closingStep.classList.remove("show");
+      endingCard.classList.remove("show");
+      endingCard.style.display = "none";
+      skipTypingBtn.style.display = "inline-block";
+
+      document.body.classList.remove("calm-mode");
+      document.body.classList.add("colorful-mode");
+
+      introCard.style.display = "none";
+      letterView.style.display = "block";
+      requestAnimationFrame(() => {
+        letterView.classList.add("active");
+      });
+
+      startMusic();
+      typeParagraph(0, 0);
+    }
+
+    function typeParagraph(pIndex, charIndex) {
+      if (isSkipping) {
+        renderAllParagraphsImmediately();
+        return;
+      }
+
+      if (pIndex >= letterParagraphs.length) {
+        onLetterCompleted();
+        return;
+      }
+
+      let pEl = document.getElementById(`p-${pIndex}`);
+      if (!pEl) {
+        pEl = document.createElement("p");
+        pEl.id = `p-${pIndex}`;
+        pEl.className = "letter-paragraph";
+        letterBody.appendChild(pEl);
+      }
+
+      const currentText = letterParagraphs[pIndex];
+      if (charIndex < currentText.length) {
+        pEl.textContent += currentText.charAt(charIndex);
+        typingTimer = setTimeout(() => {
+          typeParagraph(pIndex, charIndex + 1);
+        }, TYPE_SPEED);
+      } else {
+        typingTimer = setTimeout(() => {
+          typeParagraph(pIndex + 1, 0);
+        }, PARAGRAPH_PAUSE);
+      }
+    }
+
+    function renderAllParagraphsImmediately() {
+      clearTimeout(typingTimer);
+      letterBody.innerHTML = "";
+      letterParagraphs.forEach((text, idx) => {
+        const pEl = document.createElement("p");
+        pEl.id = `p-${idx}`;
+        pEl.className = "letter-paragraph";
+        pEl.textContent = text;
+        letterBody.appendChild(pEl);
+      });
+      onLetterCompleted();
+    }
+
+    // Bước 1: Khoảng lặng dư âm (2–3 giây)
+    function onLetterCompleted() {
+      if (isFinishedTyping) return;
+      isFinishedTyping = true;
+      skipTypingBtn.style.display = "none";
+
+      // Làm hạt trôi chậm lại để tạo cảm giác lắng đọng
+      document.body.classList.add("calm-mode");
+      afterglowNote.classList.add("show");
+
+      afterglowTimer = setTimeout(() => {
+        afterglowNote.classList.remove("show");
+        showClosingStep();
+      }, AFTERGLOW_DELAY);
+    }
+
+    // Bước 2: Hiện lời chốt & 2 lựa chọn nhẹ nhàng
+    function showClosingStep() {
+      closingStep.classList.add("show");
+    }
+
+    // Bước 3: Chuyển sang Ending card
+    function goToEnding(customQuote) {
+      if (customQuote) {
+        document.getElementById("endingQuote").textContent = customQuote;
+      }
+      letterView.classList.remove("active");
+      setTimeout(() => {
+        letterView.style.display = "none";
+        endingCard.style.display = "block";
+        requestAnimationFrame(() => {
+          endingCard.classList.add("show");
+        });
+      }, 350);
+    }
+
+    // Sự kiện nút bấm
+    openLetterBtn.addEventListener("click", startLetterFlow);
+    skipTypingBtn.addEventListener("click", () => {
+      isSkipping = true;
+      renderAllParagraphsImmediately();
+    });
+
+    // TODO: Khi có content chính thức cho 2 nút ở Bước 2, sửa logic bên dưới
+    primaryChoiceBtn.addEventListener("click", () => {
+      goToEnding("Cảm ơn bà vì đã đọc hết những dòng này. Chúc bà một mùa hè thật vui và một hành trình cấp 3 thật rực rỡ.");
+    });
+
+    secondaryChoiceBtn.addEventListener("click", () => {
+      goToEnding("Dù thế nào thì những kỷ niệm cũ vẫn rất đẹp. Chúc bà một mùa hè thật vui và một hành trình cấp 3 thật rực rỡ nha ❤❤❤.");
+    });
+
+    replayBtn.addEventListener("click", startLetterFlow);
+    musicToggle.addEventListener("click", toggleMusic);
+    endingMusicBtn.addEventListener("click", toggleMusic);
+  </script>
+</body>
+</html>
